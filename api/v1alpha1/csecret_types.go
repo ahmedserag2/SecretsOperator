@@ -29,7 +29,11 @@ type CsecretSpec struct {
 	// Important: Run "make" to regenerate code after modifying this file
 
 	// Foo is an example field of Csecret. Edit csecret_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	SecretName string `json:"secretName"`
+
+	ProjectID string `json:"projectId"`
+
+	CheckSecretsSeconds *int64 `json:"CheckSecretsSeconds"`
 }
 
 // CsecretStatus defines the observed state of Csecret

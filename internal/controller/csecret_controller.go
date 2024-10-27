@@ -25,6 +25,10 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
 	csecretv1alpha1 "github.com/SecretsOperator/api/v1alpha1"
+
+
+	secretmanager "cloud.google.com/go/secretmanager/apiv1"
+	smlistener "github.com/SecretsOperator/internal/gcpSecrets"
 )
 
 // CsecretReconciler reconciles a Csecret object
@@ -47,10 +51,31 @@ type CsecretReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.17.3/pkg/reconcile
 func (r *CsecretReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+
+	
 	_ = log.FromContext(ctx)
 
-	// TODO(user): your logic here
+	var SecretClient secretmanager.GCPSecretManagerService
+    // Fetch the CSecret instance
+	var CSecret csecretv1alpha1.Csecret
+    if err := r.Get(ctx, req.NamespacedName, &CSecret); err != nil {
+        log.Error(err, "unable to fetch CSecret")
+        return ctrl.Result{}, client.IgnoreNotFound(err)
+    }
 
+    // Retrieve secretName and projectID from the CSecret spec
+    secretName := CSecret.Spec.SecretName
+    projectID := CSecret.Spec.ProjectID
+
+	secret_payload = SecretClient.GetSecret(ctx, projectID, SecretName)    
+	if err != nil {
+        logger.Error(err, "failed to get secret from Google Secret Manager")
+        return ctrl.Result{}, err
+    }
+
+	// Log the secret payload for debugging
+    logger.Info("Retrieved secret payload", "payload", secretPayload)
+	
 	return ctrl.Result{}, nil
 }
 
