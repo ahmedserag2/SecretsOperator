@@ -24,7 +24,7 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
-	"github.com/SecretsOperator/test/utils"
+	"github.com/ahmedserag2/SecretsOperator/test/utils"
 )
 
 const namespace = "secrets-operator-system"

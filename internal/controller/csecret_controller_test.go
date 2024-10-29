@@ -27,7 +27,7 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	csecretv1alpha1 "github.com/SecretsOperator/api/v1alpha1"
+	csecretv1alpha1 "github.com/ahmedserag2/SecretsOperator/api/v1alpha1"
 )
 
 var _ = Describe("Csecret Controller", func() {

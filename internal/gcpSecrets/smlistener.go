@@ -19,8 +19,12 @@ type GCPSecretManagerService struct {
 }
 
 // NewGCPSecretManagerService initializes a new GCPSecretManagerService
-func NewGCPSecretManagerService(client *secretmanager.Client) *GCPSecretManagerService {
-	return &GCPSecretManagerService{client: client}
+func NewGCPSecretManagerService(ctx context.Context) (*GCPSecretManagerService, error) {
+	secretManagerClient, err := secretmanager.NewClient(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create Secret Manager client: %w", err)
+	}
+	return &GCPSecretManagerService{client: secretManagerClient}, nil
 }
 
 // GetSecret retrieves the secret value from Google Cloud Secret Manager

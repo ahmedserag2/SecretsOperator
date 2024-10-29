@@ -24,11 +24,9 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	csecretv1alpha1 "github.com/SecretsOperator/api/v1alpha1"
+	csecretv1alpha1 "github.com/ahmedserag2/SecretsOperator/api/v1alpha1"
 
-
-	secretmanager "cloud.google.com/go/secretmanager/apiv1"
-	smlistener "github.com/SecretsOperator/internal/gcpSecrets"
+	secret_listener "github.com/ahmedserag2/SecretsOperator/internal/gcpSecrets"
 )
 
 // CsecretReconciler reconciles a Csecret object
@@ -52,30 +50,35 @@ type CsecretReconciler struct {
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.17.3/pkg/reconcile
 func (r *CsecretReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 
-	
-	_ = log.FromContext(ctx)
+	var logger = log.FromContext(ctx)
 
-	var SecretClient secretmanager.GCPSecretManagerService
-    // Fetch the CSecret instance
-	var CSecret csecretv1alpha1.Csecret
-    if err := r.Get(ctx, req.NamespacedName, &CSecret); err != nil {
-        log.Error(err, "unable to fetch CSecret")
-        return ctrl.Result{}, client.IgnoreNotFound(err)
-    }
-
-    // Retrieve secretName and projectID from the CSecret spec
-    secretName := CSecret.Spec.SecretName
-    projectID := CSecret.Spec.ProjectID
-
-	secret_payload = SecretClient.GetSecret(ctx, projectID, SecretName)    
+	//var SecretClient secret_listener.GCPSecretManagerService
+	SecretClient, err := secret_listener.NewGCPSecretManagerService(ctx)
 	if err != nil {
-        logger.Error(err, "failed to get secret from Google Secret Manager")
-        return ctrl.Result{}, err
-    }
+		logger.Error(err, "unable to create Secret Manager client")
+		return ctrl.Result{}, err
+	}
+
+	// Fetch the CSecret instance
+	var CSecret csecretv1alpha1.Csecret
+	if err := r.Get(ctx, req.NamespacedName, &CSecret); err != nil {
+		logger.Error(err, "unable to fetch CSecret")
+		return ctrl.Result{}, client.IgnoreNotFound(err)
+	}
+
+	// Retrieve secretName and projectID from the CSecret spec
+	secretName := CSecret.Spec.SecretName
+	projectID := CSecret.Spec.ProjectID
+
+	secret_payload, err := SecretClient.GetSecret(ctx, projectID, secretName)
+	if err != nil {
+		logger.Error(err, "failed to get secret from Google Secret Manager")
+		return ctrl.Result{}, err
+	}
 
 	// Log the secret payload for debugging
-    logger.Info("Retrieved secret payload", "payload", secretPayload)
-	
+	logger.Info("Retrieved secret payload", "payload", secret_payload)
+
 	return ctrl.Result{}, nil
 }
 

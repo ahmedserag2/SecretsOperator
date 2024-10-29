@@ -34,8 +34,8 @@ import (
 	metricsserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 
-	csecretv1alpha1 "github.com/SecretsOperator/api/v1alpha1"
-	"github.com/SecretsOperator/internal/controller"
+	csecretv1alpha1 "github.com/ahmedserag2/SecretsOperator/api/v1alpha1"
+	"github.com/ahmedserag2/SecretsOperator/internal/controller"
 	//+kubebuilder:scaffold:imports
 )
 
@@ -58,7 +58,7 @@ func main() {
 	var secureMetrics bool
 	var enableHTTP2 bool
 	flag.StringVar(&metricsAddr, "metrics-bind-address", ":8080", "The address the metric endpoint binds to.")
-	flag.StringVar(&probeAddr, "health-probe-bind-address", ":8081", "The address the probe endpoint binds to.")
+	flag.StringVar(&probeAddr, "health-probe-bind-address", ":8082", "The address the probe endpoint binds to.")
 	flag.BoolVar(&enableLeaderElection, "leader-elect", false,
 		"Enable leader election for controller manager. "+
 			"Enabling this will ensure there is only one active controller manager.")

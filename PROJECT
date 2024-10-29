@@ -9,7 +9,7 @@ plugins:
   manifests.sdk.operatorframework.io/v2: {}
   scorecard.sdk.operatorframework.io/v2: {}
 projectName: secrets-operator
-repo: github.com/SecretsOperator
+repo: github.com/ahmedserag2/SecretsOperator
 resources:
 - api:
     crdVersion: v1
@@ -18,6 +18,6 @@ resources:
   domain: ssecrets
   group: csecret
   kind: Csecret
-  path: github.com/SecretsOperator/api/v1alpha1
+  path: github.com/ahmedserag2/SecretsOperator/api/v1alpha1
   version: v1alpha1
 version: "3"

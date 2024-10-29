@@ -1,4 +1,4 @@
-module github.com/SecretsOperator
+module github.com/ahmedserag2/SecretsOperator
 
 go 1.21
 

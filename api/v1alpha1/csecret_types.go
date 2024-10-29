@@ -20,8 +20,10 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
+type AuthSecretRef struct {
+    Name string `json:"name"`
+    Key  string `json:"key,omitempty"` // Optional, defaults to "credentials.json"
+}
 
 // CsecretSpec defines the desired state of Csecret
 type CsecretSpec struct {
@@ -34,6 +36,9 @@ type CsecretSpec struct {
 	ProjectID string `json:"projectId"`
 
 	CheckSecretsSeconds *int64 `json:"CheckSecretsSeconds"`
+
+	SecretRef AuthSecretRef `json:"SecretRef"`
+
 }
 
 // CsecretStatus defines the observed state of Csecret
